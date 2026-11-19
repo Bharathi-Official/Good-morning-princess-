@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Princess 💜</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: Georgia, serif;
+    text-align: center;
+    background: linear-gradient(135deg, #ead9ff, #fce7f3, #d9c5ff);
+    color: #854ca5;
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+    padding: 25px;
+    animation: fadeIn 1.5s ease;
+}
+
+h1 {
+    font-size: 36px;
+    color: #934ab4;
+    margin-bottom: 16px;
+}
+
+.subtitle {
+    font-size: 18px;
+    margin-bottom: 45px;
+    line-height: 1.5;
+}
+
+.envelope {
+    font-size: 110px;
+    cursor: pointer;
+    display: inline-block;
+    filter: drop-shadow(0 12px 15px #b88bd3);
+    animation: float 2s ease-in-out infinite;
+    transition: transform .5s;
+}
+
+.envelope:active {
+    transform: scale(.85);
+}
+
+.tap {
+    margin-top: 25px;
+    font-size: 16px;
+    animation: pulse 1.5s infinite;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* HEART AUDIO SCREEN */
+
+#audioScreen {
+    display: none;
+    animation: fadeIn 1.2s ease;
+}
+
+.heart-area {
+    width: 260px;
+    height: 260px;
+    margin: 25px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Sound waves */
+
+.wave {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    border: 2px solid rgba(179, 83, 193, .7);
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.playing .wave {
+    animation: soundWave 2s ease-out infinite;
+}
+
+.playing .wave:nth-child(2) {
+    animation-delay: .65s;
+}
+
+.playing .wave:nth-child(3) {
+    animation-delay: 1.3s;
+}
+
+/* 3D Heart */
+
+.heart {
+    font-size: 95px;
+    z-index: 2;
+    position: relative;
+    display: inline-block;
+    filter: drop-shadow(0 12px 12px rgba(166, 50, 120, .4));
+    transform-origin: center;
+}
+
+.playing .heart {
+    animation: heartbeat 1s ease-in-out infinite;
+}
+
+.heart-glow {
+    position: absolute;
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+    background: rgba(255, 100, 180, .18);
+    filter: blur(20px);
+}
+
+.status {
+    font-size: 17px;
+    color: #9455a8;
+    margin-top: 12px;
+    letter-spacing: 1px;
+}
+
+.final-message {
+    font-size: 25px;
+    line-height: 1.5;
+    margin-top: 35px;
+    color: #8e44ad;
+}
+
+/* Audio controls */
+
+audio {
+    width: 100%;
+    margin-top: 25px;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .5; }
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.2); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.13); }
+    60% { transform: scale(1); }
+}
+
+@keyframes soundWave {
+    0% {
+        transform: scale(.8);
+        opacity: .8;
+    }
+    100% {
+        transform: scale(2.4);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- WELCOME SCREEN -->
+
+    <div id="welcome">
+
+        <h1>Hey Princess! 💜</h1>
+
+        <p class="subtitle">
+            Your prince left a surprise for you...
+        </p>
+
+        <div class="envelope" onclick="openSurprise()">
+            💌
+        </div>
+
+        <p class="tap">
+            Tap to open your surprise ✨
+        </p>
+
+    </div>
+
+
+    <!-- AUDIO SURPRISE SCREEN -->
+
+    <div id="audioScreen">
+
+        <h1>For You, Princess ❤️</h1>
+
+        <div class="heart-area" id="heartArea">
+
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+
+            <div class="heart-glow"></div>
+
+            <div class="heart">❤️</div>
+
+        </div>
+
+        <p class="status" id="status">
+            A little message from my heart 💗
+        </p>
+
+        <audio
+            id="myAudio"
+            controls
+            preload="metadata"
+            onplay="startAnimation()"
+            onpause="stopAnimation()"
+            onended="stopAnimation()">
+
+            <source src="princess-voice.mp3" type="audio/mpeg">
+
+            Your browser does not support audio.
+
+        </audio>
+
+        <p class="final-message">
+            I hope you smile,<br>
+            my princess! ❤️
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+// OPEN ENVELOPE
+
+function openSurprise() {
+
+    document.getElementById("welcome")
+        .classList.add("hidden");
+
+    document.getElementById("audioScreen")
+        .style.display = "block";
+
+    const audio = document.getElementById("myAudio");
+
+    audio.load();
+
+    // Try autoplay after envelope tap
+    audio.play().catch(() => {
+        document.getElementById("status").innerText =
+            "Tap play to hear my heart 💗";
+    });
+}
+
+
+// START HEART ANIMATION
+
+function startAnimation() {
+
+    document.getElementById("heartArea")
+        .classList.add("playing");
+
+    document.getElementById("status").innerText =
+        "My heart is speaking to you... 💜";
+}
+
+
+// STOP HEART ANIMATION
+
+function stopAnimation() {
+
+    document.getElementById("heartArea")
+        .classList.remove("playing");
+
+    document.getElementById("status").innerText =
+        "A message from my heart 💗";
+}
+
+</script>
+
+</body>
+</html>
